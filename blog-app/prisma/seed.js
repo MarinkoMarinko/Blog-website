@@ -3,25 +3,31 @@ const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient();
 
 async function main() {
-  const user = await prisma.user.create({
-    data: {
-      username: 'testuser',
-      password: 'password123', 
-    },
-  });
+  // const user = await prisma.user.create({
+  //   data: {
+  //     username: 'testuser',
+  //     password: 'password123', 
+  //   },
+  // });
 
-  console.log('Created user:', user);
+  // console.log('Created user:', user);
 
-  const post = await prisma.post.create({
+  // const post1 = await prisma.post.create({
+  //   data: {
+  //     title: 'First Post',
+  //     content: 'This is the content of the first post.',
+  //     likeCount: 0,
+  //     authorId: user.id, 
+  //   },
+  // });
+  const post2 = await prisma.post.create({
     data: {
-      title: 'First Post',
+      title: 'Second Post',
       content: 'This is the content of the first post.',
       likeCount: 0,
-      authorId: user.id, 
+      authorId: '6fbd5d2f-b446-449a-a5fe-d4b5b588314f', 
     },
   });
-
-  console.log('Created post:', post);
 }
 
 main()
