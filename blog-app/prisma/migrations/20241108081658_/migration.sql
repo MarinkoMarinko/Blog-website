@@ -14,6 +14,7 @@ CREATE TABLE `Post` (
     `title` VARCHAR(191) NOT NULL,
     `content` VARCHAR(191) NOT NULL,
     `likeCount` INTEGER NOT NULL DEFAULT 0,
+    `dislikeCount` INTEGER NOT NULL DEFAULT 0,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NULL,
     `authorId` VARCHAR(191) NOT NULL,
