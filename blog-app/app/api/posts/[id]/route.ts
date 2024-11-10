@@ -8,10 +8,10 @@ export async function GET(req: Request, { params } : { params: { id: string } })
                 post_id,
             },
         });
-        return Response.json({data: post}, { status: 200});
+        return Response.json({ data: post }, { status: 200 });
     } 
     catch (error) {
-        return Response.json({err: error}, {status: 500});    
+        return Response.json({ err: error }, { status: 500 });    
     }
 }
 export async function PATCH(req: Request, { params } : { params: { id: string } }){
@@ -21,9 +21,9 @@ export async function PATCH(req: Request, { params } : { params: { id: string } 
         await prisma.post.update({
             where: { post_id }, data 
         });
-        return Response.json({msg: "Post successfully updated!"}, {status: 200});
+        return Response.json({ msg: "Post successfully updated!" }, { status: 200 });
     } catch (error) {
-        return Response.json({err: error}, {status: 500});
+        return Response.json({ err: error }, { status: 500 });
     }
 }
 export async function DELETE(req: Request, { params } : { params: { id: string } }) {
@@ -34,9 +34,9 @@ export async function DELETE(req: Request, { params } : { params: { id: string }
                 post_id,
             },
         });
-        return Response.json({msg: "Post successfully deleted!"}, { status: 200});
+        return Response.json({ msg: "Post successfully deleted!" }, { status: 200 });
     } 
     catch (error) {
-        return Response.json({err: error}, {status: 500});    
+        return Response.json({ err: error }, { status: 500 });    
     }
 }
