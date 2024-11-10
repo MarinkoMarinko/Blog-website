@@ -11,6 +11,7 @@ export async function GET() {
                 }
             }
         });
+        if(!posts) return Response.json({ data: posts }, { status: 404 });
         return Response.json({ data: posts }, { status: 200 });
     } catch (error) {
         return Response.json({ err: error }, { status: 500 });

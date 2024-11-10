@@ -1,16 +1,32 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
-import Card from '../components/Card'
+import PostComponent from '../components/Post'
 import Loading from '../components/Loading';
 import { Post } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setLoading] = useState(false);
   const getPosts = async() => {
-    const res = await fetch("http://localhost:3000/api/posts");
-    const { data } = await res.json();
-    setPosts(data);
+    try {
+      setLoading(true);
+      const res = await fetch("http://localhost:3000/api/posts");
+      if(res.status == 404)
+        router.push("/404");
+      else{
+        const { data } = await res.json();
+        setPosts(data);
+      }
+    } 
+    catch (error) {
+      console.log(error);
+    }
+    finally{
+      setLoading(false);
+    }
   }
   useEffect(() => {
     getPosts();
@@ -24,8 +40,9 @@ export default function Home() {
       <div className="w-full p-4">
         <div className="flex flex-col gap-4">
           {posts.map((post: any) => (
-            <Card 
+            <PostComponent 
               key={post.post_id} 
+              isLink={true}
               id ={post.post_id}
               username={post.author.username} 
               title={post.title} 
