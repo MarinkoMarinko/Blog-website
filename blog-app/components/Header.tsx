@@ -1,17 +1,22 @@
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
-
-const menuItems = [
-  { name: 'Home', href: '/', current: true },
-  { name: 'Sign in', href: '/login', current: false },
-];
+import { usePathname } from 'next/navigation'; // Import usePathname
 
 export default function Header() {
+  const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const pathname = usePathname(); // Get the current path
+
+  const menuItems = [
+    { name: 'Home', href: '/', visible: true },
+    { name: 'Sign in', href: '/login', visible: session ? false : true },
+  ];
 
   return (
     <nav className="border-gray-700 bg-gray-800">
-      <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
+      <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4 mb-10">
         <div className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="text-2xl font-semibold text-white">Forum</span>
         </div>
@@ -44,44 +49,121 @@ export default function Header() {
         <div className="hidden w-full md:flex md:w-auto">
           <ul className="flex flex-col md:flex-row md:space-x-8 font-medium">
             {menuItems.map((item, index) => (
-              <li key={index}>
-                <Link href={item.href}>
-                  <div
-                    className={`block py-2 px-3 rounded ${
-                      item.current
-                        ? 'text-white bg-blue-700 dark:bg-blue-600'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                    }`}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
-                    {item.name}
-                  </div>
-                </Link>
-              </li>
+              item.visible && (
+                <li key={index}>
+                  <Link href={item.href}>
+                    <div
+                      className={`block py-2 px-3 rounded ${
+                        pathname === item.href // Compare pathname to href
+                          ? 'text-white bg-blue-700 dark:bg-blue-600'
+                          : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                      }`}
+                      aria-current={pathname === item.href ? 'page' : undefined} // Set current page dynamically
+                    >
+                      {item.name}
+                    </div>
+                  </Link>
+                </li>
+              )
             ))}
+            {session?.user && (
+              <li className="relative">
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="block py-2 px-3 rounded text-gray-300 hover:bg-gray-700 hover:text-white"
+                >
+                  {session.user.name}
+                </button>
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10">
+                    <ul className="py-1">
+                      <li>
+                        <Link href="/api/auth/signout">
+                          <div className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth="1.5"
+                              stroke="currentColor"
+                              className="w-5 h-5 mr-2"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                              />
+                            </svg>
+                            Sign out
+                          </div>
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </li>
+            )}
           </ul>
         </div>
       </div>
-      {/* Dropdown menu for medium screens and below */}
       {isMenuOpen && (
         <div className="w-full md:hidden">
           <ul className="flex flex-col font-medium bg-gray-800 p-4">
             {menuItems.map((item, index) => (
-              <li key={index}>
-                <Link href={item.href}>
-                  <div
-                    className={`block py-2 px-3 rounded ${
-                      item.current
-                        ? 'text-white bg-blue-700 dark:bg-blue-600'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                    }`}
-                    aria-current={item.current ? 'page' : undefined}
-                  >
-                    {item.name}
-                  </div>
-                </Link>
-              </li>
+              item.visible && (
+                <li key={index}>
+                  <Link href={item.href}>
+                    <div
+                      className={`block py-2 px-3 rounded ${
+                        pathname === item.href // Compare pathname to href
+                          ? 'text-white bg-blue-700 dark:bg-blue-600'
+                          : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                      }`}
+                      aria-current={pathname === item.href ? 'page' : undefined} // Set current page dynamically
+                    >
+                      {item.name}
+                    </div>
+                  </Link>
+                </li>
+              )
             ))}
+            {session?.user && (
+              <li className="relative">
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="block py-2 px-3 rounded text-gray-300 hover:bg-gray-700 hover:text-white"
+                >
+                  {session.user.name}
+                </button>
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10">
+                    <ul className="py-1">
+                      <li>
+                        <Link href="/api/auth/signout">
+                          <div className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white justify-between">
+                            <span>Sign out</span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth="1.5"
+                              stroke="red"
+                              className="w-5 h-5 mr-2"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                              />
+                            </svg>
+                          </div>
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </li>
+            )}
           </ul>
         </div>
       )}

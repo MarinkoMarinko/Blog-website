@@ -20,14 +20,14 @@ async function main() {
   //     authorId: user.id, 
   //   },
   // });
-  const post2 = await prisma.post.create({
-    data: {
-      title: 'Second Post',
-      content: 'This is the content of the second post.',
-      likeCount: 0,
-      authorId: 'e8ad769c-c511-4454-a182-a202a2e33610', 
-    },
-  });
+  // const post2 = await prisma.post.create({
+  //   data: {
+  //     title: 'Second Post',
+  //     content: 'This is the content of the second post.',
+  //     likeCount: 0,
+  //     authorId: 'e8ad769c-c511-4454-a182-a202a2e33610', 
+  //   },
+  // });
 }
 
 main()

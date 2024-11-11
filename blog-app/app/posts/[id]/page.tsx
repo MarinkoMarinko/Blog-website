@@ -1,11 +1,13 @@
 "use client";
 
-import Loading from "../../../components/Loading"
-import PostComponent from "../../../components/Post"
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Post } from '@prisma/client';
 import { useRouter } from "next/navigation";
+import Loading from "../../../components/Loading"
+import PostComponent from "../../../components/Post"
+import Header from "../../../components/Header";
+import { useSession } from "next-auth/react";
 
 interface PostWithAuthor extends Post {
     author: {
@@ -14,6 +16,7 @@ interface PostWithAuthor extends Post {
   }
   
 export default function ShowPost() {
+    const { data: session } = useSession();
     const { id } = useParams();
     const router = useRouter();
     const [post, setPost] = useState<PostWithAuthor | null>(null);
@@ -40,13 +43,18 @@ export default function ShowPost() {
     }, [])
     if(isLoading) return <Loading />;
     return(
-        <PostComponent 
-              isLink={false}
-              id={post?.post_id || ""}
-              username={post?.author.username || ""} 
-              title={post?.title || ""} 
-              content={post?.content || ""} 
-        />
+        <>
+            <Header />
+            <div className="w-full px-4 pt-4">
+                <PostComponent 
+                    isLink={false}
+                    isOwner={session?.user?.name === post?.author.username}
+                    id={post?.post_id || ""}
+                    username={post?.author.username || ""} 
+                    title={post?.title || ""} 
+                    content={post?.content || ""} 
+                />
+            </div>
+        </>
     );
-     
 }
