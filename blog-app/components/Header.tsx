@@ -1,17 +1,44 @@
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { usePathname } from 'next/navigation'; // Import usePathname
+import { usePathname } from 'next/navigation';
+import SignOut from './icons/SignOut';
+import YourPosts from './icons/YourPosts';
+import LikedPosts from './icons/LikedPosts';
+import BookmarkedPosts from './icons/BookmarkedPosts';
 
 export default function Header() {
   const { data: session } = useSession();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const pathname = usePathname(); // Get the current path
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // For mobile menu
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const pathname = usePathname();
 
   const menuItems = [
-    { name: 'Home', href: '/', visible: true },
+    { name: 'Home', href: '/', visible: true},
     { name: 'Sign in', href: '/login', visible: session ? false : true },
+  ];
+
+  const drawerItems = [
+    { 
+      name: 'Your posts', 
+      href: '#', 
+      svg: <YourPosts />
+    },
+    { 
+      name: 'Liked posts',
+      href: '#',
+      svg: <LikedPosts />
+    },
+    { 
+      name: 'Bookmarked posts',
+      href: '#',
+      svg: <BookmarkedPosts />
+    },
+    { 
+      name: 'Sign out',
+      href: 'api/auth/signout', 
+      svg: <SignOut /> 
+    },
   ];
 
   return (
@@ -26,7 +53,7 @@ export default function Header() {
           className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
           aria-controls="navbar-hamburger"
           aria-expanded={isMenuOpen}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={() => setIsMenuOpen(!isMenuOpen)} // Toggle the menu open/close
         >
           <span className="sr-only">Open main menu</span>
           <svg
@@ -45,6 +72,7 @@ export default function Header() {
             />
           </svg>
         </button>
+
         {/* Full menu for larger screens */}
         <div className="hidden w-full md:flex md:w-auto">
           <ul className="flex flex-col md:flex-row md:space-x-8 font-medium">
@@ -54,11 +82,11 @@ export default function Header() {
                   <Link href={item.href}>
                     <div
                       className={`block py-2 px-3 rounded ${
-                        pathname === item.href // Compare pathname to href
+                        pathname === item.href
                           ? 'text-white bg-blue-700 dark:bg-blue-600'
                           : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                       }`}
-                      aria-current={pathname === item.href ? 'page' : undefined} // Set current page dynamically
+                      aria-current={pathname === item.href ? 'page' : undefined}
                     >
                       {item.name}
                     </div>
@@ -66,60 +94,35 @@ export default function Header() {
                 </li>
               )
             ))}
-            {session?.user && (
-              <li className="relative">
-                <button
-                  onClick={() => setShowDropdown(!showDropdown)}
-                  className="block py-2 px-3 rounded text-gray-300 hover:bg-gray-700 hover:text-white"
+            {session && (
+              <li>
+                <div
+                  className="block py-2 px-3 rounded hover:bg-gray-700 hover:text-white text-center cursor-pointer"
+                  onClick={() => setIsDrawerOpen(!isDrawerOpen)}
                 >
-                  {session.user.name}
-                </button>
-                {showDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10">
-                    <ul className="py-1">
-                      <li>
-                        <Link href="/api/auth/signout">
-                          <div className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth="1.5"
-                              stroke="currentColor"
-                              className="w-5 h-5 mr-2"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-                              />
-                            </svg>
-                            Sign out
-                          </div>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                )}
+                  {session.user?.name}
+                </div>
               </li>
             )}
           </ul>
         </div>
       </div>
+
+      {/* Mobile menu (Hamburger) */}
       {isMenuOpen && (
-        <div className="w-full md:hidden">
-          <ul className="flex flex-col font-medium bg-gray-800 p-4">
+        <div className="md:hidden">
+          <ul className="flex flex-col space-y-4 font-medium">
             {menuItems.map((item, index) => (
               item.visible && (
                 <li key={index}>
                   <Link href={item.href}>
                     <div
-                      className={`block py-2 px-3 rounded ${
-                        pathname === item.href // Compare pathname to href
+                      className={`block py-2 px-3 rounded text-center ${
+                        pathname === item.href
                           ? 'text-white bg-blue-700 dark:bg-blue-600'
                           : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                       }`}
-                      aria-current={pathname === item.href ? 'page' : undefined} // Set current page dynamically
+                      aria-current={pathname === item.href ? 'page' : undefined}
                     >
                       {item.name}
                     </div>
@@ -127,44 +130,68 @@ export default function Header() {
                 </li>
               )
             ))}
-            {session?.user && (
-              <li className="relative">
-                <button
-                  onClick={() => setShowDropdown(!showDropdown)}
-                  className="block py-2 px-3 rounded text-gray-300 hover:bg-gray-700 hover:text-white"
+            {session && (
+              <li>
+                <div
+                  className="block py-2 px-3 rounded hover:bg-gray-700 hover:text-white text-center cursor-pointer"
+                  onClick={() => setIsDrawerOpen(!isDrawerOpen)}
                 >
-                  {session.user.name}
-                </button>
-                {showDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10">
-                    <ul className="py-1">
-                      <li>
-                        <Link href="/api/auth/signout">
-                          <div className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-600 hover:text-white justify-between">
-                            <span>Sign out</span>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth="1.5"
-                              stroke="red"
-                              className="w-5 h-5 mr-2"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
-                              />
-                            </svg>
-                          </div>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                )}
+                  {session.user?.name}
+                </div>
               </li>
             )}
           </ul>
+        </div>
+      )}
+
+      {/* Drawer */}
+      {isDrawerOpen && (
+        <div 
+          id='drawer'
+          data-drawer-hide="drawer"
+          className="fixed top-0 right-0 w-64 h-full bg-gray-900 text-white shadow-lg p-4 z-50 flex flex-col"
+        >
+          <div className="flex items-center justify-between">
+            <span className="mb-3"><b>{session?.user?.name}</b></span>
+            <button
+              type="button"
+              className="self-end text-white mb-4"
+              onClick={() => setIsDrawerOpen(false)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 hover:bg-gray-700 rounded-sm"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <hr className="mb-2" />
+          <ul className="flex-1 space-y-2">
+            {drawerItems.slice(0, -1).map((item, index) => (
+              <li key={index}>
+                <Link href={item.href}>
+                  <div className="py-2 px-3 hover:bg-gray-700 rounded flex items-center justify-between">
+                    {item.name}
+                    {item.svg}
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-auto">
+            <hr className="mb-2" />
+            <Link href={drawerItems[drawerItems.length - 1].href}>
+              <div className="flex items-center justify-between py-2 px-3 hover:bg-gray-700 rounded">
+                {drawerItems[drawerItems.length - 1].name}
+                {drawerItems[drawerItems.length - 1].svg}
+              </div>
+            </Link>
+          </div>
         </div>
       )}
     </nav>
