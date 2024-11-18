@@ -53,6 +53,8 @@ export default function ShowPost() {
                     username={post?.author.username || ""} 
                     title={post?.title || ""} 
                     content={post?.content || ""} 
+                    likeCount={post?.likeCount || 0}
+                    dislikeCount={post?.dislikeCount || 0}
                 />
             </div>
         </>

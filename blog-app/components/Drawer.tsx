@@ -38,7 +38,7 @@ export default function Drawer(){
         {session && (
             <li>
               <div
-                className="block py-2 px-3 rounded hover:bg-gray-700 hover:text-white text-center cursor-pointer"
+                className="block py-2 px-3 rounded hover:bg-blue-700 text-gray-900 hover:text-white dark:hover:bg-gray-700 dark:text-gray-300 text-center cursor-pointer"
                 onClick={() => setIsDrawerOpen(!isDrawerOpen)}
               >
                 {session.user?.name}
@@ -54,12 +54,12 @@ export default function Drawer(){
               tabIndex={-1} 
               aria-labelledby="drawer-navigation-label"
             >
-                <h5 id="drawer-navigation-label" className="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Menu</h5>
+                <h5 id="drawer-navigation-label" className="text-base font-semibold text-gray-800 uppercase dark:text-gray-400">Menu</h5>
                 <button
                     type="button"
                     data-drawer-hide="drawer-navigation"
                     aria-controls="drawer-navigation"
-                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    className="text-gray-800 bg-transparent hover:bg-blue-700 hover:text-white rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:text-gray-300 dark:hover:bg-gray-600"
                     onClick={() => setIsDrawerOpen(false)}
                 >
                     <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -71,7 +71,7 @@ export default function Drawer(){
                     {drawerItems.slice(0, -1).map((item, index) => (
                         <li key={index}>
                             <Link href={item.href}>
-                                <div className="py-2 px-3 hover:bg-gray-700 rounded flex items-center justify-between">
+                                <div className="py-2 px-3 text-gray-800 hover:text-white hover:bg-blue-700 dark:text-gray-300 dark:hover:bg-gray-700 rounded flex items-center justify-between">
                                     {item.name}
                                     {item.svg}
                                 </div>
@@ -80,9 +80,9 @@ export default function Drawer(){
                      ))}
                 </ul>
                 <div className="mt-auto">
-                        <hr className="mb-2" />
+                        <hr className="mb-2 border-black dark:border-gray-600" />
                         <Link href={drawerItems[drawerItems.length - 1].href}>
-                            <div className="flex items-center justify-between py-2 px-3 hover:bg-gray-700 rounded">
+                            <div className="flex items-center justify-between py-2 px-3 text-gray-800 hover:text-white hover:bg-blue-700 dark:text-gray-300 dark:hover:bg-gray-700 rounded">
                                 {drawerItems[drawerItems.length - 1].name}
                                 {drawerItems[drawerItems.length - 1].svg}
                             </div>

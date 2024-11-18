@@ -19,11 +19,11 @@ export default function Register(){
             password: form.password
         })
         // if(!res?.ok)
-        //     throw new Error("Unknown error!");        uvek nije ispravan response (PROVERITI!!!)
+        //     throw new Error("Unknown error!");      
         router.replace('/')
     }
     return(
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+        <div className="min-h-screen flex items-center justify-center">
             <div className="w-full max-w-md p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
                 <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">Make an account</h2>
                 <form className="space-y-6" onSubmit={handleSubmit}>
@@ -33,7 +33,7 @@ export default function Register(){
                             type="text"
                             name="username"
                             id="username"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            className="bg-gray-50 border border-gray-900 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Type your username..."
                             required
                             onChange={(e) => setForm(prev => ({...prev, username: e.target.value}))}
@@ -45,7 +45,7 @@ export default function Register(){
                             type="password"
                             name="password"
                             id="password"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            className="bg-gray-50 border border-gray-900 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required
                             placeholder="Type your password..."
                             onChange={(e) => setForm(prev => ({...prev, password: e.target.value}))}

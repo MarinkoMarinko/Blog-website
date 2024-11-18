@@ -49,6 +49,8 @@ export default function Home() {
               username={post.author.username} 
               title={post.title} 
               content={post.content} 
+              likeCount={post.likeCount}
+              dislikeCount={post.dislikeCount}
             />
           ))}
         </div>

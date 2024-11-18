@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import Drawer from "./Drawer"
-
+import ColorModeButton from './ColorModeButton';
 export default function Header() {
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false); // For mobile menu
@@ -16,10 +16,10 @@ export default function Header() {
   ];
 
   return (
-    <nav className="border-gray-700 bg-gray-800">
+    <nav className="border-black bg-white dark:bg-gray-800 dark:border-gray-300">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4 mb-10">
         <div className="flex items-center space-x-3 rtl:space-x-reverse">
-          <span className="text-2xl font-semibold text-white">Forum</span>
+          <span className="text-2xl font-semibold text-gray-900 dark:text-white">Forum</span>
         </div>
         {/* Hamburger button */}
         <button
@@ -58,7 +58,7 @@ export default function Header() {
                       className={`block py-2 px-3 rounded ${
                         pathname === item.href
                           ? 'text-white bg-blue-700 dark:bg-blue-600'
-                          : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                          : 'text-gray-900  hover:bg-blue-700 hover:text-white dark:text-gray-300 dark:hover:bg-gray-700'
                       }`}
                       aria-current={pathname === item.href ? 'page' : undefined}
                     >
@@ -69,6 +69,7 @@ export default function Header() {
               )
             ))}
             <Drawer />
+            <ColorModeButton />
           </ul>
         </div>
       </div>
@@ -85,7 +86,7 @@ export default function Header() {
                       className={`block py-2 px-3 rounded text-center ${
                         pathname === item.href
                           ? 'text-white bg-blue-700 dark:bg-blue-600'
-                          : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                          : 'text-gray-300 hover:bg-blue-600 dark:hover:bg-gray-700 hover:text-white' 
                       }`}
                       aria-current={pathname === item.href ? 'page' : undefined}
                     >
@@ -96,6 +97,7 @@ export default function Header() {
               )
             ))}
             <Drawer />
+            <ColorModeButton />
           </ul>
         </div>
       )}
