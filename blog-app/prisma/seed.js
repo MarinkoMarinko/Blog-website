@@ -17,7 +17,7 @@ async function main() {
   //     title: 'First Post',
   //     content: 'This is the content of the first post.',
   //     likeCount: 0,
-  //     authorId: user.id, 
+  //     authorId: "d84323eb-ce53-4a5a-847f-7ab2a3fafe54" 
   //   },
   // });
   // const post2 = await prisma.post.create({

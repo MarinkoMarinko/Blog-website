@@ -10,8 +10,8 @@ export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const handleSubmit = async(e: any) => {
-        await e.preventDefault();
-        const res = await signIn('credentials', {
+        e.preventDefault();
+        const res = await signIn('SignIn', {
             redirect: false,
             username,
             password,

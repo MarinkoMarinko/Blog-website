@@ -2,43 +2,17 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import SignOut from './icons/SignOut';
-import YourPosts from './icons/YourPosts';
-import LikedPosts from './icons/LikedPosts';
-import BookmarkedPosts from './icons/BookmarkedPosts';
+
+import Drawer from "./Drawer"
 
 export default function Header() {
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false); // For mobile menu
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const pathname = usePathname();
 
   const menuItems = [
     { name: 'Home', href: '/', visible: true},
     { name: 'Sign in', href: '/login', visible: session ? false : true },
-  ];
-
-  const drawerItems = [
-    { 
-      name: 'Your posts', 
-      href: '#', 
-      svg: <YourPosts />
-    },
-    { 
-      name: 'Liked posts',
-      href: '#',
-      svg: <LikedPosts />
-    },
-    { 
-      name: 'Bookmarked posts',
-      href: '#',
-      svg: <BookmarkedPosts />
-    },
-    { 
-      name: 'Sign out',
-      href: 'api/auth/signout', 
-      svg: <SignOut /> 
-    },
   ];
 
   return (
@@ -94,16 +68,7 @@ export default function Header() {
                 </li>
               )
             ))}
-            {session && (
-              <li>
-                <div
-                  className="block py-2 px-3 rounded hover:bg-gray-700 hover:text-white text-center cursor-pointer"
-                  onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-                >
-                  {session.user?.name}
-                </div>
-              </li>
-            )}
+            <Drawer />
           </ul>
         </div>
       </div>
@@ -130,68 +95,8 @@ export default function Header() {
                 </li>
               )
             ))}
-            {session && (
-              <li>
-                <div
-                  className="block py-2 px-3 rounded hover:bg-gray-700 hover:text-white text-center cursor-pointer"
-                  onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-                >
-                  {session.user?.name}
-                </div>
-              </li>
-            )}
+            <Drawer />
           </ul>
-        </div>
-      )}
-
-      {/* Drawer */}
-      {isDrawerOpen && (
-        <div 
-          id='drawer'
-          data-drawer-hide="drawer"
-          className="fixed top-0 right-0 w-64 h-full bg-gray-900 text-white shadow-lg p-4 z-50 flex flex-col"
-        >
-          <div className="flex items-center justify-between">
-            <span className="mb-3"><b>{session?.user?.name}</b></span>
-            <button
-              type="button"
-              className="self-end text-white mb-4"
-              onClick={() => setIsDrawerOpen(false)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 hover:bg-gray-700 rounded-sm"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          <hr className="mb-2" />
-          <ul className="flex-1 space-y-2">
-            {drawerItems.slice(0, -1).map((item, index) => (
-              <li key={index}>
-                <Link href={item.href}>
-                  <div className="py-2 px-3 hover:bg-gray-700 rounded flex items-center justify-between">
-                    {item.name}
-                    {item.svg}
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-auto">
-            <hr className="mb-2" />
-            <Link href={drawerItems[drawerItems.length - 1].href}>
-              <div className="flex items-center justify-between py-2 px-3 hover:bg-gray-700 rounded">
-                {drawerItems[drawerItems.length - 1].name}
-                {drawerItems[drawerItems.length - 1].svg}
-              </div>
-            </Link>
-          </div>
         </div>
       )}
     </nav>

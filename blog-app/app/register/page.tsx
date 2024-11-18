@@ -1,5 +1,6 @@
 'use client';
 
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -12,18 +13,14 @@ export default function Register(){
     });
     const handleSubmit = async(e: any) => {
         e.preventDefault();
-        const res = await fetch("http://localhost:3000/api/auth/signup", {
-            method: 'POST',
-            body: JSON.stringify({
-                username: form.username,
-                password: form.password
-            })
+        const res = await signIn('SignUp', {
+            redirect: false,
+            username: form.username,
+            password: form.password
         })
-
-        if(!res.ok)
-            throw new Error("Unknown Error!");
-
-        router.replace('login')
+        // if(!res?.ok)
+        //     throw new Error("Unknown error!");        uvek nije ispravan response (PROVERITI!!!)
+        router.replace('/')
     }
     return(
         <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">

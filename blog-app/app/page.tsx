@@ -1,10 +1,12 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 import Header from '../components/Header';
 import PostComponent from '../components/Post'
 import Loading from '../components/Loading';
 import { Post } from '@prisma/client';
-import { useRouter } from 'next/navigation';
+
 
 export default function Home() {
   const router = useRouter();
@@ -32,7 +34,7 @@ export default function Home() {
     getPosts();
   }, [])
 
-  if(posts.length === 0) return <Loading />
+  if(isLoading) return <Loading />
 
   return (
     <>

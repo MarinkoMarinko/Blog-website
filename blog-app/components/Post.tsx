@@ -1,9 +1,8 @@
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 type CardProps = {
   isLink: boolean;
-  isOwner: boolean;
+  isOwner?: boolean;
   id: string;
   username: string;
   title: string;

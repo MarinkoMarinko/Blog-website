@@ -11,7 +11,7 @@ export const authOptions = {
 const handler = NextAuth({
     providers:[
         CredentialsProvider({
-            name: "Credentials",
+            id: "SignIn",
             credentials: {
               username: { label: "Username", type: "text" },
               password: { label: "Password", type: "password" }
@@ -32,13 +32,40 @@ const handler = NextAuth({
                 console.log(error);
                 return null;
             } 
-          }})
+          }}),
+          CredentialsProvider({
+            id: "SignUp",
+            credentials: {
+                username: { label: "Username", type: "text" },
+                password: { label: "Password", type: "password" }
+              },
+            async authorize(credentials) {
+              try {
+                const existingUser = await prisma.user.findFirst({
+                  where: { username: credentials?.username },
+                });
+    
+                if(existingUser)
+                  return null;
+                
+                const hashedPassword = await bcrypt.hash(credentials?.password || '', 10);
+
+                const user = await prisma.user.create({
+                  data: {
+                    username: credentials?.username || '',
+                    password: hashedPassword,
+                  },
+                });
+                return user;
+              } catch (error) {
+                console.error(error);
+                return null; 
+              }
+            },
+          }),
     ],
     callbacks: {
         async signIn({ user, account, profile, email, credentials }) {
-
-            // console.log(user, account, profile, email, credentials, 'singin');
-
             return true;
         },
         async jwt({ token, account, profile }) {
@@ -46,17 +73,11 @@ const handler = NextAuth({
             const user = await prisma.user.findFirst({ where: {
                 id: token.sub
             }})
-
-            return {
-                id: user?.id,
-                name: user?.username
-            };
+            token.name = user?.username;
+            return token;
             
         },
         async session({ session, token, user }) {
-
-            // console.log(session, token, user, 'session');
-
             return session;
         }
     }, 
